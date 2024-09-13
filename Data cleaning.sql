@@ -20,10 +20,6 @@ FROM ds_jobs;
 UPDATE ds_jobs
 SET Rating = ROUND(Rating,2);
 	
-	SUBSTRINGG
-SELECT Salary_Estimate, SUBSTRING_INDEX(Salary_Estimate, '-', 1)
-FROM ds_jobs;
-
 SELECT *
 FROM ds_jobs;
 
@@ -31,7 +27,7 @@ FROM ds_jobs;
 SELECT Salary_Estimate,
 SUBSTRING(Salary_Estimate, -1,13) Salary
 FROM ds_jobs;
-
+-- TESTING THE SEPARATE QUERY BEFORE INPUT IT INTO THE TABLE
 SELECT SUBSTRING(Salary_Estimate,1,5) AS MIN, s.Salary_Estimate
 FROM ( SELECT Salary_Estimate,
 SUBSTRING(Salary_Estimate, -1,13) AS Salary_Sub
@@ -55,7 +51,6 @@ FROM ds_jobs;
 UPDATE ds_jobs
 SET Max_Sal = SUBSTRING(Salary_Estimate,7,5);
 
-
 UPDATE ds_jobs
 SET Min_sal = SUBSTRING(Salary_Estimate,1,5);
 
@@ -65,13 +60,14 @@ DROP COLUMN Salary_Estimate;
 ALTER TABLE ds_jobs
 ADD job_state varchar(50);
 
-
+-- GET THE ABbREVIATION IN THE COLUMN TO ANOTHER NEW COLUMN
 SELECT Location, RIGHT(Location,2)
 FROM ds_jobs;
 
 UPDATE ds_jobs
 SET job_state = RIGHT(Location,2);
 
+-- REMOVE THE RATINGS IN THE COLUMN
 SELECT Company_Name, RIGHT(Company_Name, 3)
 FROM ds_jobs;
 
@@ -90,18 +86,27 @@ UPDATE ds_jobs
 SET Revenue = NULL
 WHERE Revenue = 'Unknown / Non-Applicable';
 
-
-SELECT Revenue, CAST(Revenue AS numeric(18,2))
-FROM ds_jobs;
-GROUP BY Revenue;
-CAST(
+UPDATE ds_jobs
+SET REVENUE = REPLACE(Revenue, RIGHT(Revenue, 5),' ')
+WHERE LEN(Revenue) >= 5;
 
 SELECT Revenue, REPLACE(Revenue, RIGHT(Revenue, 5),' ')
 FROM ds_jobs
 WHERE LEN(Revenue) >= 5;
 
+-- DROP JOB DESC COLUMN
 ALTER TABLE ds_jobs
 DROP COLUMN Job_Description;
 
 SELECT *
+FROM ds_jobs;
+
+-- TRIM OPTHER FOR EXTRA SPACES
+SELECT Job_Title, TRIM(Job_Title)
+FROM ds_jobs;
+
+SELECT Industry, TRIM(Industry)
+FROM ds_jobs;
+
+SELECT Sector, TRIM(Sector)
 FROM ds_jobs;
